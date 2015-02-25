@@ -7,7 +7,7 @@
   <body>
       <header>
           <h1><%= title %></h1>
-          <ul class="type" id="type">
+          <ul class="type" >
               <li data-type="dot">Dot</li>
               <li data-type="column" class="selected">Column</li>
           </ul>
@@ -18,11 +18,14 @@
       <div class="left">
           <ul id="list">
              <% music.forEach(function(name){%>
-                <li><%= name %></li>
+                <li title='<%= name %>'><%= name %></li>
              <%})%>
           </ul>
       </div>
       <div class="right" id="box"></div>
 
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/main.js"></script>
+    
   </body>
 </html>

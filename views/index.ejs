@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+      <header>
+          <h1><%= title %></h1>
+          <ul class="type" id="type">
+              <li data-type="dot">Dot</li>
+              <li data-type="column" class="selected">Column</li>
+          </ul>
+          <p>
+              <label>Volume <input id="volume" type="range" name="" value="60" min="0" max="100"></label>
+          </p>
+      </header>
+      <div class="left">
+          <ul id="list">
+             <% music.forEach(function(name){%>
+                <li><%= name %></li>
+             <%})%>
+          </ul>
+      </div>
+      <div class="right" id="box"></div>
+
+  </body>
+</html>

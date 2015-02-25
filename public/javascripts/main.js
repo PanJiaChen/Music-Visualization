@@ -14,11 +14,14 @@ gainNode.connect(audioContext.destination);
 var size=128;
 analyser.fttSize=size*2;
 analyser.connect(gainNode);
+
 musicList.on("click","li",function(){
     $(this).siblings().removeClass('selected');
     $(this).addClass('selected');
     loadMusic('media/'+$(this).attr('title'));
 })
+
+
 
 function loadMusic(url){
     var n=++count;
@@ -79,28 +82,71 @@ $("#volume").on('mousedown', function(event) {
 var canvasHeight;
 var canvasWidth;
 var canvas=document.createElement("canvas");
-
+var line;
+var dots=[];
 var ctx=canvas.getContext("2d");
 $('#box').append(canvas);
-
-function draw(arr){
-    ctx.clearRect(0,0,width,height)
-    var w=width/size;
+function random(min,max){
+    return Math.round(Math.random()*(max-min)+min);
+}
+function getDots(){
+    dots=[];
     for(var i=0;i<size;i++){
-        var h=arr[i]/256*height;
-        ctx.fillRect(w*i,height-h,w*0.6,h)
+        var x=random(0,width); 
+        var y=random(0,height);
+        var color="rgb("+random(0,255)+","+random(0,255)+","+random(0,255)+")"; 
+        dots.push({
+            x : x,
+            y : y,
+            color : color
+        });   
     }
 }
+
+draw.type="column";//初始化draw的类型
+function draw(arr){
+    ctx.clearRect(0,0,width,height)
+    if(draw.type=='column'){
+        line.addColorStop(0,"red");
+        line.addColorStop(0.5,"yellow");
+        line.addColorStop(1,"green");
+        ctx.fillStyle=line;
+        var w=width/size;
+        for(var i=0;i<size;i++){
+            var h=arr[i]/256*height;
+            ctx.fillRect(w*i,height-h,w*0.6,h)
+        }
+    }else{
+        for(var i=0;i<size;i++){
+            ctx.beginPath();
+            var o=dots[i];
+            var r=arr[i]/256*50;
+            ctx.arc(o.x,o.y,r,0,Math.PI*2,true);
+            var circle=ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r);
+            circle.addColorStop(0,"#fff");
+            circle.addColorStop(1, o.color);
+            ctx.fillStyle=circle;
+            ctx.fill();
+         }
+    }
+    
+}
+
+//选择可视化的类型
+$('#typeList').on("click","li",function(){
+    $(this).siblings().removeClass('selected');
+    $(this).addClass('selected');
+    draw.type=$(this).attr('data-type');
+})
+
 function reSize(){
     height=$('#box').height();
     width=$('#box').width();
     canvas.height=height;
     canvas.width=width;
-    var line=ctx.createLinearGradient(0,0,0,height);
-    line.addColorStop(0,"red");
-    line.addColorStop(0.5,"yellow");
-    line.addColorStop(1,"green");
-    ctx.fillStyle=line;
+    line=ctx.createLinearGradient(0,0,0,height);
+    
+    getDots();
 };
 reSize()
 

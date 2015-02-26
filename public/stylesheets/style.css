@@ -3,8 +3,7 @@
     margin: 0;
     box-sizing: border-box;
 }
-html,
-body {
+html, body {
     height: 100%;
 }
 body {
@@ -12,9 +11,7 @@ body {
     background-color: #000;
     text-align: center;
 }
-header,
-.left,
-.right {
+header, .left, .right {
     position: absolute;
 }
 header {
@@ -59,10 +56,11 @@ header .type li {
     left: 10px;
     top: 170px;
     bottom: 10px;
-    /*width: 200px;*/
+    
     width: 15%;
-    /*min-width: 140px;*/
+    
     border: 1px #fff solid;
+    overflow: auto;
 }
 .left ul {
     overflow: auto;
@@ -86,34 +84,41 @@ header .type li {
     top: 170px;
     right: 10px;
     bottom: 10px;
-    /*left: 220px;*/
     left: calc(15% + 20px);
     left: -webkit-calc(15% + 20px);
-    /*border: 1px #fff solid;*/
 }
- 
-input[type="range"] { /*滑条*/
-    -webkit-appearance = none;    /*取消默认样式*/
+input[type="range"] {
+    /*滑条*/
+    
+    -webkit-appearance: none;
+    /*取消默认样式*/
+    
     height: 8px;
     background: #999;
     border-radius: 10px;
     outline: none;
 }
-input[type="range"]::-webkit-slider-thumb {    /*滑块*/
-    -webkit-appearance = none;
+input[type="range"]::-webkit-slider-thumb {
+    /*滑块*/
+    
+    -webkit-appearance: none;
     height: 12px;
     width: 12px;
     background: #fff;
     border-radius: 100%;
 }
-input[type="range"]::-moz-range-track {    /*滑条*/
+input[type="range"]::-moz-range-track {
+    /*滑条*/
+    
     height: 8px;
     background: #999;
     border-radius: 10px;
     border: none;
 }
-input[type="range"]::-moz-range-thumb {    /*滑块伪类*/
-    -webkit-appearance = none;
+input[type="range"]::-moz-range-thumb {
+    /*滑块伪类*/
+    
+    -webkit-appearance none;
     height: 12px;
     width: 12px;
     background: #fff;
@@ -139,8 +144,7 @@ input[type="range"]::-moz-range-thumb {    /*滑块伪类*/
         height: 16px;
         line-height: 16px;
     }
-    .left,
-    .right {
+    .left, .right {
         top: 100px;
     }
 }

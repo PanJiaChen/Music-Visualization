@@ -24,7 +24,7 @@ $("#list").on("click", "li", function() {
 //变化音量
 $("#volume").on('mousedown', function(event) {
     $(this).on('mousemove', function(event) {
-        mv.changevolume($(this).val() / 100);
+        mv.changeVolume($(this).val() / 100);
     });
 });
 

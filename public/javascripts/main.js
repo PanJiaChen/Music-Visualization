@@ -38,7 +38,7 @@ function getDots() {
     for (var i = 0; i < size; i++) {
         var x = random(0, width);
         var y = random(0, height);
-        var color = "rgba(" + random(0, 255) + "," + random(0, 255) + "," + random(0, 255) +","+ 0.5+")";
+        var color = "rgba(" + random(0, 255) + "," + random(0, 255) + "," + random(0, 255) +","+ 0.2+")";
         dots.push({
             x: x,
             y: y,
@@ -113,3 +113,14 @@ reSize()
 $(window).resize(function() {
     reSize()
 });
+
+//移动端
+$(document).ready(function(){
+    prepareForMobile();
+});
+
+function prepareForMobile(){
+    if (window.screen.availWidth<500) {
+       size=16;
+    };
+}

@@ -148,3 +148,13 @@ input[type="range"]::-moz-range-thumb {
         top: 100px;
     }
 }
+.loading{
+    width: 50%;
+    height: 50%;
+    left: 0px;
+    right: 0px;
+    position: absolute;
+    margin: auto;
+    top: 20%;
+    display: none;
+}

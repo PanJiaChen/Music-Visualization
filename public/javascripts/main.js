@@ -16,6 +16,7 @@ var mv = new MusicVisualizer({
 
 //选择歌曲
 $("#list").on("click", "li", function() {
+    $(".loading").show();
     $(this).siblings().removeClass('selected');
     $(this).addClass('selected');
     mv.play('media/' + $(this).attr('title'));
@@ -28,11 +29,19 @@ $("#volume").on('mousedown', function(event) {
     });
 });
 
-//随机函数
+//随机函数 整数
 function random(min, max) {
-        return Math.round(Math.random() * (max - min) + min);
-    }
-    //随机生成点
+        min = min || 0;
+        max = max || 1;
+        return max >= min ? Math.round(Math.random()*(max - min) + min) : 0;
+}
+// //随机函数 带小数
+// function randomFloat(min, max) {
+//         min = min || 0;
+//         max = max || 1;
+//         return max >= min ? (Math.random()*(max - min) + min).toFixed(1) : 0;
+// }
+//随机生成点
 function getDots() {
     dots = [];
     for (var i = 0; i < size; i++) {

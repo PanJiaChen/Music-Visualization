@@ -31,7 +31,8 @@ MusicVisualizer.prototype.load = function(url,fun) {
 
 MusicVisualizer.prototype.decode=function(arraybuffer,fun){
     MusicVisualizer.ac.decodeAudioData(arraybuffer,function(buffer){
-        fun(buffer)
+        fun(buffer);
+        $(".loading").hide();
     },function(err){
         console.log(err);
     })

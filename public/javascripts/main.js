@@ -51,7 +51,6 @@ function getDots() {
         var color = colorList[random(0,colorList.length-1)];
         var shadowBlur = Math.floor(Math.random() * 30) + 15;
         var alpha = random(0,1);
-        console.log(color,shadowBlur)
         dots.push({
             x: x,
             y: y,
@@ -74,14 +73,17 @@ function draw(arr) {
         line.addColorStop(0.5, "cyan");
         line.addColorStop(1, "magenta");
         ctx.fillStyle = line;
+        ctx.shadowBlur = 0;
         var w = width / size;
         var cw=w*0.6;
         var capH=cw>10?cw:10;
         for (var i = 0; i < size; i++) {
+            ctx.beginPath();
             var h = arr[i] / 256 * height;
             var o = dots[i];
             ctx.fillRect(w * i, height - h, cw, h);
             ctx.fillRect(w * i, height - o.cap-capH, cw, capH);
+            ctx.closePath();
             o.cap--;
             if(o.cap<0){
                 o.cap=0;
@@ -105,6 +107,7 @@ function draw(arr) {
             ctx.shadowColor = o.color;
             o.x+=o.dx;
             o.x=o.x>width?0:o.x;
+            ctx.closePath();
         }
     }
 

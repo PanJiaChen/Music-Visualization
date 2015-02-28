@@ -69,9 +69,10 @@ function draw(arr) {
     ctx.clearRect(0, 0, width, height);
      
     if (draw.type == 'column') {
-        line.addColorStop(0, "red");
-        line.addColorStop(0.5, "yellow");
-        line.addColorStop(1, "green");
+
+        line.addColorStop(0, "gold");
+        line.addColorStop(0.5, "cyan");
+        line.addColorStop(1, "magenta");
         ctx.fillStyle = line;
         var w = width / size;
         var cw=w*0.6;

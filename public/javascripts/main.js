@@ -1,10 +1,11 @@
-var size = 64;
+var size      = 64;
 var canvasHeight;
 var canvasWidth;
-var canvas = document.createElement("canvas");
-var ctx = canvas.getContext("2d");
+var canvas    = document.createElement("canvas");
+var ctx       = canvas.getContext("2d");
 var line;
-var dots = [];
+var dots      = [];
+var colorList = ["gold","cyan","magenta"];
 
 $('#box').append(canvas);
 
@@ -47,13 +48,18 @@ function getDots() {
     for (var i = 0; i < size; i++) {
         var x = random(0, width);
         var y = random(0, height);
-        var color = "rgba(" + random(0, 255) + "," + random(0, 255) + "," + random(0, 255) +","+ 0.2+")";
+        var color = colorList[random(0,colorList.length-1)];
+        var shadowBlur = Math.floor(Math.random() * 30) + 15;
+        var alpha = random(0,1);
+        console.log(color,shadowBlur)
         dots.push({
             x: x,
             y: y,
             dx:random(1,2),
             color: color,
-            cap:0
+            cap:0,
+            shadowBlur:shadowBlur,
+            alpha:alpha
         });
     }
 }
@@ -83,17 +89,19 @@ function draw(arr) {
                 o.cap=h+40>height-capH?height-capH:h+40;
             }
         }
-    } else {
+    } else if(draw.type == 'dot') {
         for (var i = 0; i < size; i++) {
             ctx.beginPath();
             var o = dots[i];
             var r = 10+arr[i] / 256 * (height>width?width:height)/10;
             ctx.arc(o.x, o.y, r, 0, Math.PI * 2, true);
-            var circle = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r);
-            circle.addColorStop(0, "#fff");
-            circle.addColorStop(1, o.color);
-            ctx.fillStyle = circle;
+            // var circle = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r);
+            // circle.addColorStop(0, "#fff");
+            // circle.addColorStop(1, o.color);
+            ctx.fillStyle = 'rgba(255,255,255,' + o.alpha + ')';
             ctx.fill();
+            ctx.shadowBlur = o.shadowBlur;
+            ctx.shadowColor = o.color;
             o.x+=o.dx;
             o.x=o.x>width?0:o.x;
         }

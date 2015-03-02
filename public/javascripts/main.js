@@ -1,4 +1,6 @@
 var size      = 64;
+var height = $('#box').height();
+var    width = $('#box').width();
 var canvasHeight;
 var canvasWidth;
 var canvas    = document.createElement("canvas");
@@ -8,88 +10,69 @@ var dots      = [];
 var colorList = ["gold","cyan","magenta"];
 $('#box').append(canvas);
 
-//初始化MusicVisualizer
-var mv = new MusicVisualizer({
-    size: size,
-    visualizer: draw
-})
+
 
 /************************************************************************/
 /* 3d*/
-var scene=new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 0.1, 1000);
-render = new THREE.WebGLRenderer({antialias: true});
-render.setSize(window.canvasWidth, window.canvasHeight);
-document.body.appendChild(render.domElement);
-var MWIDTH = 2;
-var MTHICKNESS = 1;
-var GAP = 1;
-var METERNUM = Math.round(100 / (this.MWIDTH + this.GAP)); // calculated by 200/(MWIDTH+GAP),200 is the width of the visualizer area
-//创建绿色柱条的形状
-var cubeGeometry = new THREE.CubeGeometry(MWIDTH, 1, MTHICKNESS);
-//创建绿色柱条的材质
-var cubeMaterial = new THREE.MeshPhongMaterial({
-    color: 0x01FF00,
-    ambient: 0x01FF00,
-    specular: 0x01FF00,
-    shininess: 20,
-    reflectivity: 5.5
-});
-//创建白色盖子的形状
-var capGeometry = new THREE.CubeGeometry(MWIDTH, 0.5, MTHICKNESS);
-//创建白色盖子的材质
-var capMaterial = new THREE.MeshPhongMaterial({
-    color: 0xffffff,
-    ambient: 0x01FF00,
-    specular: 0x01FF00,
-    shininess: 20,
-    reflectivity: 5.5
-});
+function init3D(){}
+    var scene=new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    render = new THREE.WebGLRenderer({antialias: true});
+    render.setSize(width, height);
+   
+    document.body.appendChild(render.domElement);
+    var MWIDTH = 2;
+    var MTHICKNESS = 1;
+    var GAP = 1;
+    var METERNUM = Math.round(100 / (this.MWIDTH + this.GAP)); // calculated by 200/(MWIDTH+GAP),200 is the width of the visualizer area
+    //创建绿色柱条的形状
+    var cubeGeometry = new THREE.CubeGeometry(MWIDTH, 1, MTHICKNESS);
+    //创建绿色柱条的材质
+    var cubeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+    //创建白色盖子的形状
+    var capGeometry = new THREE.CubeGeometry(MWIDTH, 0.5, MTHICKNESS);
+    //创建白色盖子的材质
+    var capMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
 
-//创建一字排开的柱条和盖子，并添加到场景中
-for (var i = METERNUM - 1; i >= 0; i--) {
-    var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-    cube.position.x = -45 + (MWIDTH + GAP) * i;
-    cube.position.y = -1;
-    cube.position.z = 0.5;
-    cube.castShadow = true;
-    cube.name = 'cube' + i;
-    scene.add(cube);
-    
-};
-// function render() {
-//             // requestAnimationFrame(render);
-//             // cube.rotation.x += 0.1;
-//             // cube.rotation.y += 0.1;
-//             render.render(scene, camera);
-//         }
-//         render();
-//  var renderAnimation = function(arr) {
-//     if (mv.analyser) {
-//         var step = Math.round(arr / METERNUM);
-//         for (var i = 0; i < METERNUM; i++) {
-//             var value = arr[1] / 4;
-//             value = value < 1 ? 1 : value;
-//             var meter = scene.getObjectByName('cube' + i, true),
-//                 cap = scene.getObjectByName('cap' + i, true);
-//             meter.scale.y = value;
-//             //计算柱条边沿尺寸以获得高度
-//             meter.geometry.computeBoundingBox();
-//             height = (meter.geometry.boundingBox.max.y - meter.geometry.boundingBox.min.y) * value;
-//             //将柱条高度与盖子高度进行比较
-//             if (height / 2 > cap.position.y) {
-//                 cap.position.y = height / 2;
-//             } else {
-//                 cap.position.y -= controls.dropSpeed;
-//             };
-//         }
-//     };
-//     //重新渲染画面
-//     render.render(scene, camera);
-//     requestAnimationFrame(renderAnimation);
-// };
-// requestAnimationFrame(renderAnimation);
+    for (var i = 64 - 1; i >= 0; i--) {
+                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+                cube.position.x = -45 + (MWIDTH + GAP) * i;
+                cube.position.y = -1;
+                cube.position.z = 0.5;
+                cube.castShadow = true;
+                cube.name = 'cube' + i;
+                scene.add(cube);
+                var cap = new THREE.Mesh(capGeometry, capMaterial);
+                cap.position.x = -45 + (MWIDTH + GAP) * i;
+                cap.position.y = 0.5;
+                cap.position.z = 0.5;
+                cap.castShadow = true;
+                cap.name = 'cap' + i;
+                scene.add(cap);  
+
+                //the camera
+                camera.position.x = 0;
+                camera.position.y = 10;
+                camera.position.z = 100;
+                // render.render(scene, camera);  
+            };
+           // var cap = new THREE.Mesh(capGeometry, capMaterial); 
+           // cap.position.y = 0.5;  
+           // camera.position.z = 8.5;
+           // scene.add(cap); 
+            render.render(scene, camera);
+  
+
+
 /************************************************************************/
+//初始化MusicVisualizer
+var mv = new MusicVisualizer({
+    size: size,
+    visualizer: draw,
+    scene:scene,
+    camera:camera
+
+})
 
 
 
@@ -190,23 +173,18 @@ function draw(arr) {
             ctx.closePath();
         }
     }else if(draw.type == '3D'){
-       var step = Math.round(arr / METERNUM);
+       var step = Math.round(arr / size);
         for (var i = 0; i < METERNUM; i++) {
             var value = arr[i] / 4;
             value = value < 1 ? 1 : value;
-            var meter = scene.getObjectByName('cube' + i, true),
+            var meter = this.scene.getObjectByName('cube' + i, true),
                 cap = scene.getObjectByName('cap' + i, true);
             meter.scale.y = value;
             //计算柱条边沿尺寸以获得高度
-            meter.geometry.computeBoundingBox();
-            height = (meter.geometry.boundingBox.max.y - meter.geometry.boundingBox.min.y) * value;
-            //将柱条高度与盖子高度进行比较
-            if (height / 2 > cap.position.y) {
-                cap.position.y = height / 2;
-            } else {
-                cap.position.y -= controls.dropSpeed;
-            };
-        }
+           // render.render(this.scene, camera);
+
+        } 
+ render.render(this.scene, this.camera);
     }
 
 }
@@ -226,6 +204,7 @@ function reSize() {
     line = ctx.createLinearGradient(0, 0, 0, height);
 
     getDots();
+    init3D();
 };
 reSize()
 

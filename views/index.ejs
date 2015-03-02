@@ -37,29 +37,23 @@
      var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
         var renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(1000, window.innerHeight);
         document.body.appendChild(renderer.domElement);
         var geometry = new THREE.CubeGeometry(1,1,1);
         var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
         var cube = new THREE.Mesh(geometry, material); 
-        cube.position.y = -1;
-        camera.position.z = 5;
+        cube.position.y = 0.5;
+       cube.position.z = 0.5;
+       camera.position.z = 8.5;
         scene.add(cube);
         
 
-        var cube = new THREE.Mesh(geometry, material);
-        cube.name = 'cube2' ;
-         camera.position.z = 5;
-        scene.add(cube);
         // console.log(scene)
-        function apple() {
-            requestAnimationFrame(apple);
-            cube.rotation.x += 0.1;
-            cube.rotation.y += 0.1;
+       
+           
 
             renderer.render(scene, camera);
-        }
-        apple();
+        
         </script>
     
   </body>

@@ -11,7 +11,7 @@ $('#box').append(canvas);
 //初始化MusicVisualizer
 var mv = new MusicVisualizer({
     size: size,
-    visualizer: draw
+    visualizer: renderAnimation
 })
 
 /************************************************************************/
@@ -63,33 +63,31 @@ for (var i = METERNUM - 1; i >= 0; i--) {
     cap.name = 'cap' + i;
     scene.add(cap);
 };
- var renderAnimation = function() {
-    if (mv.analyser) {
-        var array = new Uint8Array(mv.analyser.frequencyBinCount);
-        mv.analyser.getByteFrequencyData(array);
-        var step = Math.round(array.length / METERNUM);
-        for (var i = 0; i < METERNUM; i++) {
-            var value = array[i * step] / 4;
-            value = value < 1 ? 1 : value;
-            var meter = scene.getObjectByName('cube' + i, true),
-                cap = scene.getObjectByName('cap' + i, true);
-            meter.scale.y = value;
-            //计算柱条边沿尺寸以获得高度
-            meter.geometry.computeBoundingBox();
-            height = (meter.geometry.boundingBox.max.y - meter.geometry.boundingBox.min.y) * value;
-            //将柱条高度与盖子高度进行比较
-            if (height / 2 > cap.position.y) {
-                cap.position.y = height / 2;
-            } else {
-                cap.position.y -= controls.dropSpeed;
-            };
-        }
-    };
-    //重新渲染画面
-    render.render(scene, camera);
-    requestAnimationFrame(renderAnimation);
-};
-requestAnimationFrame(renderAnimation);
+//  var renderAnimation = function(arr) {
+//     if (mv.analyser) {
+//         var step = Math.round(arr / METERNUM);
+//         for (var i = 0; i < METERNUM; i++) {
+//             var value = arr[1] / 4;
+//             value = value < 1 ? 1 : value;
+//             var meter = scene.getObjectByName('cube' + i, true),
+//                 cap = scene.getObjectByName('cap' + i, true);
+//             meter.scale.y = value;
+//             //计算柱条边沿尺寸以获得高度
+//             meter.geometry.computeBoundingBox();
+//             height = (meter.geometry.boundingBox.max.y - meter.geometry.boundingBox.min.y) * value;
+//             //将柱条高度与盖子高度进行比较
+//             if (height / 2 > cap.position.y) {
+//                 cap.position.y = height / 2;
+//             } else {
+//                 cap.position.y -= controls.dropSpeed;
+//             };
+//         }
+//     };
+//     //重新渲染画面
+//     render.render(scene, camera);
+//     requestAnimationFrame(renderAnimation);
+// };
+// requestAnimationFrame(renderAnimation);
 /************************************************************************/
 
 
@@ -144,55 +142,55 @@ function getDots() {
     }
 }
 
-draw.type = "column"; //初始化draw的类型
-function draw(arr) {
-    ctx.clearRect(0, 0, width, height);
+// draw.type = "column"; //初始化draw的类型
+// function draw(arr) {
+//     ctx.clearRect(0, 0, width, height);
      
-    if (draw.type == 'column') {
+//     if (draw.type == 'column') {
 
-        line.addColorStop(0, "gold");
-        line.addColorStop(0.5, "cyan");
-        line.addColorStop(1, "magenta");
-        ctx.fillStyle = line;
-        ctx.shadowBlur = 0;
-        var w = width / size;
-        var cw=w*0.6;
-        var capH=cw>10?cw:10;
-        for (var i = 0; i < size; i++) {
-            ctx.beginPath();
-            var h = arr[i] / 256 * height;
-            var o = dots[i];
-            ctx.fillRect(w * i, height - h, cw, h);
-            ctx.fillRect(w * i, height - o.cap-capH, cw, capH);
-            ctx.closePath();
-            o.cap--;
-            if(o.cap<0){
-                o.cap=0;
-            }
-            if(h>0&&o.cap<(h+40)){
-                o.cap=h+40>height-capH?height-capH:h+40;
-            }
-        }
-    } else if(draw.type == 'dot') {
-        for (var i = 0; i < size; i++) {
-            ctx.beginPath();
-            var o = dots[i];
-            var r = 10+arr[i] / 256 * (height>width?width:height)/10;
-            ctx.arc(o.x, o.y, r, 0, Math.PI * 2, true);
-            // var circle = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r);
-            // circle.addColorStop(0, "#fff");
-            // circle.addColorStop(1, o.color);
-            ctx.fillStyle = 'rgba(255,255,255,' + o.alpha + ')';
-            ctx.fill();
-            ctx.shadowBlur = o.shadowBlur;
-            ctx.shadowColor = o.color;
-            o.x+=o.dx;
-            o.x=o.x>width?0:o.x;
-            ctx.closePath();
-        }
-    }
+//         line.addColorStop(0, "gold");
+//         line.addColorStop(0.5, "cyan");
+//         line.addColorStop(1, "magenta");
+//         ctx.fillStyle = line;
+//         ctx.shadowBlur = 0;
+//         var w = width / size;
+//         var cw=w*0.6;
+//         var capH=cw>10?cw:10;
+//         for (var i = 0; i < size; i++) {
+//             ctx.beginPath();
+//             var h = arr[i] / 256 * height;
+//             var o = dots[i];
+//             ctx.fillRect(w * i, height - h, cw, h);
+//             ctx.fillRect(w * i, height - o.cap-capH, cw, capH);
+//             ctx.closePath();
+//             o.cap--;
+//             if(o.cap<0){
+//                 o.cap=0;
+//             }
+//             if(h>0&&o.cap<(h+40)){
+//                 o.cap=h+40>height-capH?height-capH:h+40;
+//             }
+//         }
+//     } else if(draw.type == 'dot') {
+//         for (var i = 0; i < size; i++) {
+//             ctx.beginPath();
+//             var o = dots[i];
+//             var r = 10+arr[i] / 256 * (height>width?width:height)/10;
+//             ctx.arc(o.x, o.y, r, 0, Math.PI * 2, true);
+//             // var circle = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r);
+//             // circle.addColorStop(0, "#fff");
+//             // circle.addColorStop(1, o.color);
+//             ctx.fillStyle = 'rgba(255,255,255,' + o.alpha + ')';
+//             ctx.fill();
+//             ctx.shadowBlur = o.shadowBlur;
+//             ctx.shadowColor = o.color;
+//             o.x+=o.dx;
+//             o.x=o.x>width?0:o.x;
+//             ctx.closePath();
+//         }
+//     }
 
-}
+// }
 
 //选择可视化的类型
 $('#typeList').on("click", "li", function() {

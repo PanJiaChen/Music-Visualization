@@ -11,7 +11,7 @@
           <ul class="type" id='typeList'>
               <li data-type="dot">Dot</li>
               <li data-type="column" class="selected">Column</li>
-              <li data-type="cool">3D</li>
+              <li data-type="3D">3D</li>
           </ul>
           <p>
               <label>Volume <input id="volume" type="range" name="" value="60" min="0" max="100"></label>
@@ -42,15 +42,25 @@
         var geometry = new THREE.CubeGeometry(1,1,1);
         var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
         var cube = new THREE.Mesh(geometry, material); 
-        scene.add(cube);
+        cube.position.y = -1;
         camera.position.z = 5;
-        function render() {
-            requestAnimationFrame(render);
+        scene.add(cube);
+        
+
+        var cube = new THREE.Mesh(geometry, material);
+        cube.name = 'cube2' ;
+         camera.position.z = 5;
+        scene.add(cube);
+        // console.log(scene)
+        function apple() {
+            requestAnimationFrame(apple);
             cube.rotation.x += 0.1;
             cube.rotation.y += 0.1;
+
             renderer.render(scene, camera);
         }
-        render();</script>
+        apple();
+        </script>
     
   </body>
 </html>

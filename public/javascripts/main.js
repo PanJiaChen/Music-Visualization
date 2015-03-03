@@ -8,7 +8,7 @@ var ctx       = canvas.getContext("2d");
 var line;
 var dots      = [];
 var colorList = ["gold","cyan","magenta"];
-$('#box').append(canvas);
+// $('#box').append(canvas);
 
 
 
@@ -20,7 +20,8 @@ function init3D(){}
     render = new THREE.WebGLRenderer({antialias: true});
     render.setSize(width, height);
    
-    document.body.appendChild(render.domElement);
+   // document.getElementById('box').appendChild(render.domElement);
+   $('#box').append(render.domElement);
     var MWIDTH = 2;
     var MTHICKNESS = 1;
     var GAP = 1;
@@ -28,13 +29,33 @@ function init3D(){}
     //创建绿色柱条的形状
     var cubeGeometry = new THREE.CubeGeometry(MWIDTH, 1, MTHICKNESS);
     //创建绿色柱条的材质
-    var cubeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+    var cubeMaterial = new THREE.MeshPhongMaterial({
+            color: 0x01FF00,
+            ambient: 0x01FF00,
+            specular: 0x01FF00,
+            shininess: 20,
+            reflectivity: 5.5
+        });
     //创建白色盖子的形状
     var capGeometry = new THREE.CubeGeometry(MWIDTH, 0.5, MTHICKNESS);
     //创建白色盖子的材质
-    var capMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
-
-    for (var i = 64 - 1; i >= 0; i--) {
+    var capMaterial = new THREE.MeshPhongMaterial({
+            color: 0xffffff,
+            ambient: 0x01FF00,
+            specular: 0x01FF00,
+            shininess: 20,
+            reflectivity: 5.5
+        });
+    var spotLight = new THREE.SpotLight(0xffffff);
+    var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+    //控制
+    orbitControls = new THREE.OrbitControls(camera);
+    orbitControls.minDistance = 50;
+    orbitControls.maxDistance = 200;
+    orbitControls.maxPolarAngle = 1.5;
+    orbitControls.noPan = true;
+    clock = new THREE.Clock();
+    for (var i = 64- 1; i >= 0; i--) {
                 var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
                 cube.position.x = -45 + (MWIDTH + GAP) * i;
                 cube.position.y = -1;
@@ -54,7 +75,17 @@ function init3D(){}
                 camera.position.x = 0;
                 camera.position.y = 10;
                 camera.position.z = 100;
-                // render.render(scene, camera);  
+                camera.lookAt(scene.position);
+                //add an ambient light for a better look
+                scene.add(ambientLight);
+                //the spot light
+                spotLight.position.set(0, 60, 40);
+                //spotLight.castShadow = true;
+                scene.add(spotLight);
+                var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+                directionalLight.castShadow = true;
+                directionalLight.position.set(0, 10, 10);
+                scene.add(directionalLight); 
             };
            // var cap = new THREE.Mesh(capGeometry, capMaterial); 
            // cap.position.y = 0.5;  
@@ -70,7 +101,8 @@ var mv = new MusicVisualizer({
     size: size,
     visualizer: draw,
     scene:scene,
-    camera:camera
+    camera:camera,
+    clock:clock
 
 })
 
@@ -174,14 +206,22 @@ function draw(arr) {
         }
     }else if(draw.type == '3D'){
        var step = Math.round(arr / size);
+       var delta=this.clock.getDelta();
+       console.log(delta)
         for (var i = 0; i < METERNUM; i++) {
             var value = arr[i] / 4;
             value = value < 1 ? 1 : value;
             var meter = this.scene.getObjectByName('cube' + i, true),
-                cap = scene.getObjectByName('cap' + i, true);
+                cap = this.scene.getObjectByName('cap' + i, true);
             meter.scale.y = value;
             //计算柱条边沿尺寸以获得高度
-           // render.render(this.scene, camera);
+            meter.geometry.computeBoundingBox();
+            height = (meter.geometry.boundingBox.max.y - meter.geometry.boundingBox.min.y) * value;
+            if (height / 2 > cap.position.y) {
+                cap.position.y = (height / 2-0.5)>0?(height / 2-0.5):0.5;
+            } else {
+                cap.position.y -= 0.1;
+            };
 
         } 
  render.render(this.scene, this.camera);

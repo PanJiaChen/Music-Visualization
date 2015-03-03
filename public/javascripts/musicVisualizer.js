@@ -9,6 +9,7 @@ function MusicVisualizer(obj){
     this.size=obj.size;
     this.scene=obj.scene;
     this.camera=obj.camera;
+    this.clock=obj.clock;
     this.analyser.fftSize=this.size*2;
     this.gainNode=MusicVisualizer.ac[MusicVisualizer.ac.createGain?"createGain":"createGainNode"](0);
     this.gainNode.connect(MusicVisualizer.ac.destination);

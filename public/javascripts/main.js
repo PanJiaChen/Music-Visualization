@@ -1,6 +1,6 @@
 var size      = 64;
 var height = $('#box').height();
-var   width = $('#box').width();
+var width = $('#box').width();
 var canvasHeight;
 var canvasWidth;
 var canvas    = document.createElement("canvas");
@@ -8,7 +8,7 @@ var ctx       = canvas.getContext("2d");
 var line;
 var dots      = [];
 var colorList = ["gold","cyan","magenta"];
-// $('#box').append(canvas);
+$('#box').append(canvas);
 
 
 
@@ -20,13 +20,9 @@ function init3D(){}
     render = new THREE.WebGLRenderer({antialias: true});
     render.setSize(width, height);
    
-   // document.getElementById('box').appendChild(render.domElement);
-   $('#box').append(render.domElement);
     var _3dWidth= 4;
-    console.log(_3dWidth )
     var MTHICKNESS = 1;
     var gap = 1;
-    console.log(width)
     var METERNUM = Math.round(100 / (this._3dWidth + this.gap)); // calculated by 200/(_3dWidth+gap),200 is the width of the visualizer area
     //创建绿色柱条的形状
     var cubeGeometry = new THREE.CubeGeometry(_3dWidth, 1, MTHICKNESS);
@@ -230,6 +226,11 @@ $('#typeList').on("click", "li", function() {
     $(this).siblings().removeClass('selected');
     $(this).addClass('selected');
     draw.type = $(this).attr('data-type');
+    if(draw.type=="3D"){
+        $('#box').empty().append(render.domElement);
+    }else{
+        $('#box').empty().append(canvas);
+    }
 })
 
 function reSize() {

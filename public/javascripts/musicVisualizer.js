@@ -1,18 +1,18 @@
 window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;//兼容游览器
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
-MusicVisualizer.ac=new window.AudioContext();
+audioContext=new window.AudioContext();
 
 function MusicVisualizer(obj){
     var source=null;
     this.count=0;
-    this.analyser=MusicVisualizer.ac.createAnalyser();
+    this.analyser=audioContext.createAnalyser();
     this.size=obj.size;
     this.scene=obj.scene;
     this.camera=obj.camera;
     this.clock=obj.clock;
     this.analyser.fftSize=this.size*2;
-    this.gainNode=MusicVisualizer.ac[MusicVisualizer.ac.createGain?"createGain":"createGainNode"](0);
-    this.gainNode.connect(MusicVisualizer.ac.destination);
+    this.gainNode=audioContext[audioContext.createGain?"createGain":"createGainNode"](0);
+    this.gainNode.connect(audioContext.destination);
     this.analyser.connect(this.gainNode);
     this.xhr = new XMLHttpRequest();
     this.visualizer=obj.visualizer;
@@ -33,7 +33,7 @@ MusicVisualizer.prototype.load = function(url,fun) {
 }
 
 MusicVisualizer.prototype.decode=function(arraybuffer,fun){
-    MusicVisualizer.ac.decodeAudioData(arraybuffer,function(buffer){
+    audioContext.decodeAudioData(arraybuffer,function(buffer){
         fun(buffer);
         $(".loading").hide();
     },function(err){
@@ -50,7 +50,7 @@ MusicVisualizer.prototype.play=function(url){
                 return;
             }
         self.decode(arraybuffer,function(buffer){
-            var  bufferSource=MusicVisualizer.ac.createBufferSource();//创建一个音频source
+            var  bufferSource=audioContext.createBufferSource();//创建一个音频source
             bufferSource.buffer=buffer;//告诉source是哪个音频
             bufferSource.connect(self.analyser);//将source和context's destination连接 相当于扬声器
             bufferSource[bufferSource.start?"start":"noteOn"](0);//noteOn兼容老版本

@@ -1,6 +1,6 @@
 var size      = 64;
 var height = $('#box').height();
-var    width = $('#box').width();
+var   width = $('#box').width();
 var canvasHeight;
 var canvasWidth;
 var canvas    = document.createElement("canvas");
@@ -22,27 +22,29 @@ function init3D(){}
    
    // document.getElementById('box').appendChild(render.domElement);
    $('#box').append(render.domElement);
-    var MWIDTH = 2;
+    var _3dWidth= 4;
+    console.log(_3dWidth )
     var MTHICKNESS = 1;
-    var GAP = 1;
-    var METERNUM = Math.round(100 / (this.MWIDTH + this.GAP)); // calculated by 200/(MWIDTH+GAP),200 is the width of the visualizer area
+    var gap = 1;
+    console.log(width)
+    var METERNUM = Math.round(100 / (this._3dWidth + this.gap)); // calculated by 200/(_3dWidth+gap),200 is the width of the visualizer area
     //创建绿色柱条的形状
-    var cubeGeometry = new THREE.CubeGeometry(MWIDTH, 1, MTHICKNESS);
+    var cubeGeometry = new THREE.CubeGeometry(_3dWidth, 1, MTHICKNESS);
     //创建绿色柱条的材质
     var cubeMaterial = new THREE.MeshPhongMaterial({
-            color: 0x01FF00,
-            ambient: 0x01FF00,
-            specular: 0x01FF00,
+            color: "cyan",
+            ambient: "cyan",
+            specular: "cyan",
             shininess: 20,
             reflectivity: 5.5
         });
     //创建白色盖子的形状
-    var capGeometry = new THREE.CubeGeometry(MWIDTH, 0.5, MTHICKNESS);
+    var capGeometry = new THREE.CubeGeometry(_3dWidth, 0.5, MTHICKNESS);
     //创建白色盖子的材质
     var capMaterial = new THREE.MeshPhongMaterial({
-            color: 0xffffff,
-            ambient: 0x01FF00,
-            specular: 0x01FF00,
+            color: "magenta",
+            ambient: "magenta",
+            specular: "magenta",
             shininess: 20,
             reflectivity: 5.5
         });
@@ -55,43 +57,38 @@ function init3D(){}
     orbitControls.maxPolarAngle = 1.5;
     orbitControls.noPan = true;
     clock = new THREE.Clock();
-    for (var i = 64- 1; i >= 0; i--) {
-                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-                cube.position.x = -45 + (MWIDTH + GAP) * i;
-                cube.position.y = -1;
-                cube.position.z = 0.5;
-                cube.castShadow = true;
-                cube.name = 'cube' + i;
-                scene.add(cube);
-                var cap = new THREE.Mesh(capGeometry, capMaterial);
-                cap.position.x = -45 + (MWIDTH + GAP) * i;
-                cap.position.y = 0.5;
-                cap.position.z = 0.5;
-                cap.castShadow = true;
-                cap.name = 'cap' + i;
-                scene.add(cap);  
-
-                //the camera
-                camera.position.x = 0;
-                camera.position.y = 10;
-                camera.position.z = 100;
-                camera.lookAt(scene.position);
-                //add an ambient light for a better look
-                scene.add(ambientLight);
-                //the spot light
-                spotLight.position.set(0, 60, 40);
-                //spotLight.castShadow = true;
-                scene.add(spotLight);
-                var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
-                directionalLight.castShadow = true;
-                directionalLight.position.set(0, 10, 10);
-                scene.add(directionalLight); 
-            };
-           // var cap = new THREE.Mesh(capGeometry, capMaterial); 
-           // cap.position.y = 0.5;  
-           // camera.position.z = 8.5;
-           // scene.add(cap); 
-            render.render(scene, camera);
+    for (var i = 32; i >= 0; i--) {
+            var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+            cube.position.x =-80+(_3dWidth + gap) * i;
+            cube.position.y = -1;
+            cube.position.z = 0.5;
+            cube.castShadow = true;
+            cube.name = 'cube' + i;
+            scene.add(cube);
+            var cap = new THREE.Mesh(capGeometry, capMaterial);
+            cap.position.x =  -80+(_3dWidth + gap) * i;
+            cap.position.y = 0.5;
+            cap.position.z = 0.5;
+            cap.castShadow = true;
+            cap.name = 'cap' + i;
+            scene.add(cap);  
+            //the camera
+            camera.position.x = 0;
+            camera.position.y = 10;
+            camera.position.z = 100;
+            camera.lookAt(scene.position);
+            //add an ambient light for a better look
+            scene.add(ambientLight);
+            //the spot light
+            spotLight.position.set(0, 60, 40);
+            //spotLight.castShadow = true;
+            scene.add(spotLight);
+            var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+            directionalLight.castShadow = true;
+            directionalLight.position.set(0, 10, 10);
+            scene.add(directionalLight); 
+    };
+    render.render(scene, camera);
   
 
 
@@ -207,7 +204,6 @@ function draw(arr) {
     }else if(draw.type == '3D'){
        var step = Math.round(arr / size);
        var delta=this.clock.getDelta();
-       console.log(delta)
         for (var i = 0; i < METERNUM; i++) {
             var value = arr[i] / 4;
             value = value < 1 ? 1 : value;

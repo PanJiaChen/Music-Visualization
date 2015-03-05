@@ -19,6 +19,7 @@ function init3D(){}
     var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     render = new THREE.WebGLRenderer({antialias: true});
     render.setSize(width, height);
+    console.log(height);
    
     var _3dWidth= 4;
     var MTHICKNESS = 1;
@@ -186,9 +187,6 @@ function draw(arr) {
             var o = dots[i];
             var r = 10+arr[i] / 256 * (height>width?width:height)/10;
             ctx.arc(o.x, o.y, r, 0, Math.PI * 2, true);
-            // var circle = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r);
-            // circle.addColorStop(0, "#fff");
-            // circle.addColorStop(1, o.color);
             ctx.fillStyle = 'rgba(255,255,255,' + o.alpha + ')';
             ctx.fill();
             ctx.shadowBlur = o.shadowBlur;
@@ -216,7 +214,7 @@ function draw(arr) {
             };
 
         } 
- render.render(this.scene, this.camera);
+    render.render(this.scene, this.camera);
     }
 
 }
@@ -229,6 +227,7 @@ $('#typeList').on("click", "li", function() {
     if(draw.type=="3D"){
         $('#box').empty().append(render.domElement);
     }else{
+        reSize();
         $('#box').empty().append(canvas);
     }
 })

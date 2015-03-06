@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
         if(err){
             console.log(err);
         }else{
-            res.render('index', { title: 'Music-Visualization', music: names });
+            res.render('index', { title: 'Music-Visualization html5 音乐可视化', music: names });
         }
     })
   

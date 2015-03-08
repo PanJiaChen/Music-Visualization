@@ -42,7 +42,6 @@ MusicVisualizer.prototype.decode=function(arraybuffer,fun){
 }
 MusicVisualizer.prototype.play=function(url){
      this.visualize();
-     console.log(url)
     var n=++this.count;
     var self=this;
     this.source&&this.stop();
@@ -86,7 +85,6 @@ MusicVisualizer.prototype.visualize = function() {
 
     function show() {
         self.analyser.getByteFrequencyData(arr);
-        // console.log(arr)
         self.visualizer(arr);
         window.requestAnimationFrame(show);
     };

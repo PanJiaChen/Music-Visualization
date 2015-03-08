@@ -42,21 +42,35 @@ MusicVisualizer.prototype.decode=function(arraybuffer,fun){
 }
 MusicVisualizer.prototype.play=function(url){
      this.visualize();
+     console.log(url)
     var n=++this.count;
     var self=this;
     this.source&&this.stop();
-    this.load(url,function(arraybuffer){
-        if(n != self.count){
-                return;
-            }
-        self.decode(arraybuffer,function(buffer){
-            var  bufferSource=audioContext.createBufferSource();//创建一个音频source
-            bufferSource.buffer=buffer;//告诉source是哪个音频
-            bufferSource.connect(self.analyser);//将source和context's destination连接 相当于扬声器
-            bufferSource[bufferSource.start?"start":"noteOn"](0);//noteOn兼容老版本
-            self.source=bufferSource;
+    //判断哪种方式传入
+    if(url instanceof ArrayBuffer ){
+        self.decode(url,function(buffer){
+                var  bufferSource=audioContext.createBufferSource();//创建一个音频source
+                bufferSource.buffer=buffer;//告诉source是哪个音频
+                bufferSource.connect(self.analyser);//将source和context's destination连接 相当于扬声器
+                bufferSource[bufferSource.start?"start":"noteOn"](0);//noteOn兼容老版本
+                self.source=bufferSource;
         })
+    }
+    if(typeof url==='string'){
+        this.load(url,function(arraybuffer){
+            if(n != self.count){
+                    return;
+                }
+            self.decode(arraybuffer,function(buffer){
+                var  bufferSource=audioContext.createBufferSource();//创建一个音频source
+                bufferSource.buffer=buffer;//告诉source是哪个音频
+                bufferSource.connect(self.analyser);//将source和context's destination连接 相当于扬声器
+                bufferSource[bufferSource.start?"start":"noteOn"](0);//noteOn兼容老版本
+                self.source=bufferSource;
+            })
     })
+    }
+    
 }
 MusicVisualizer.prototype.stop=function(){
     this.source[this.source.stop? "stop" : "noteOff"](0);

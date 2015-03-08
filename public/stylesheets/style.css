@@ -158,3 +158,16 @@ input[type="range"]::-moz-range-thumb {
     top: 20%;
     display: none;
 }
+#add{
+    font-size: 14px;
+    width: 110px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    color:#fff;
+    margin: 20px 0;
+    cursor: pointer;
+}
+#loadMusic{
+    visibility: hidden;
+}

@@ -19,7 +19,6 @@ function init3D(){}
     var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     render = new THREE.WebGLRenderer({antialias: true});
     render.setSize(width, height);
-    console.log(height);
    
     var _3dWidth= 4;
     var MTHICKNESS = 1;
@@ -258,3 +257,16 @@ function prepareForMobile(){
        size=16;
     };
 }
+//添加本地文件
+$('#add').on('click',function(){
+    $('#loadMusic').click();
+})
+$("#loadMusic").on('change',function(){
+    var file=this.files[0];
+    var fr=new FileReader();
+    fr.onload=function(e){
+        mv.play(e.target.result);
+    }
+    fr.readAsArrayBuffer(file);
+    $(".play")&&($('.play').className='')
+})

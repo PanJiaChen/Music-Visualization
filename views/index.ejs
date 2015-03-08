@@ -20,6 +20,8 @@
           </p>
       </header>
       <div class="left">
+          <div id="add">添加本地歌曲</div>
+          <input type='file' id='loadMusic'>
           <ul id="list">
              <% music.forEach(function(name){%> 
                 <li title='<%= name %>'><%= name %></li>

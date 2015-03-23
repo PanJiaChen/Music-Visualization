@@ -8,3 +8,4 @@ npm install
 启一下服务
 
 将一首mp3格式的歌曲发在public/media目录下 或加载本地歌曲；
+线上demo：http://panjiachen.github.io/Music-Visualization/
